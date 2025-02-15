@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 
-export function setupApiRoutes(roomManager) {
+function setupApiRoutes(roomManager) {
     const router = express.Router();
 
     // Get information about all rooms
@@ -25,3 +25,5 @@ export function setupApiRoutes(roomManager) {
 
     return router;
 }
+
+module.exports = setupApiRoutes;

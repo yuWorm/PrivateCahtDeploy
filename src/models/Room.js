@@ -1,4 +1,4 @@
-export class Room {
+class Room {
     constructor(id) {
         this.id = id;
         this.clients = new Set();
@@ -34,3 +34,5 @@ export class Room {
         return this.clients.size;
     }
 }
+
+module.exports = Room;

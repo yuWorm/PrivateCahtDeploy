@@ -1,14 +1,14 @@
-import { WebSocket, WebSocketServer } from 'ws';
-import { config } from '../config.js';
+const WebSocket = require('ws');
+const config = require('../config');
 
-export class WebSocketService {
+class WebSocketService {
     constructor(roomManager) {
         this.roomManager = roomManager;
         this.wss = null;
     }
 
     initialize(server) {
-        this.wss = new WebSocketServer({ noServer: true });
+        this.wss = new WebSocket.Server({ noServer: true });
         this.setupWebSocketServer();
         return this.wss;
     }
@@ -150,3 +150,5 @@ export class WebSocketService {
         }, config.heartbeat.interval);
     }
 }
+
+module.exports = WebSocketService;

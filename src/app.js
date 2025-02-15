@@ -1,21 +1,17 @@
-import express from 'express';
-import morgan from 'morgan';
-import { createServer } from 'http';
-import { parse } from 'url';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import { config } from './config.js';
-import { RoomManager } from './models/RoomManager.js';
-import { WebSocketService } from './services/WebSocketService.js';
-import { setupApiRoutes } from './routes/api.js';
+const express = require('express');
+const morgan = require('morgan');
+const http = require('http');
+const url = require('url');
+const path = require('path');
+const config = require('./config');
+const RoomManager = require('./models/RoomManager');
+const WebSocketService = require('./services/WebSocketService');
+const setupApiRoutes = require('./routes/api');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export class App {
+class App {
     constructor() {
         this.app = express();
-        this.server = createServer(this.app);
+        this.server = http.createServer(this.app);
         this.roomManager = new RoomManager();
         this.wsService = new WebSocketService(this.roomManager);
     }
@@ -25,7 +21,7 @@ export class App {
         this.app.use(morgan('dev'));
         
         // Static files
-        this.app.use(express.static(join(__dirname, '../dist')));
+        this.app.use(express.static(path.join(__dirname, '../dist')));
         
         // API routes
         this.app.use('/api', setupApiRoutes(this.roomManager));
@@ -35,7 +31,7 @@ export class App {
 
         // WebSocket upgrade handling
         this.server.on('upgrade', (request, socket, head) => {
-            const pathname = parse(request.url).pathname;
+            const pathname = url.parse(request.url).pathname;
             const roomMatch = pathname.match(/^\/ws\/(\w+)$/);
 
             if (!roomMatch) {
@@ -60,3 +56,5 @@ export class App {
         });
     }
 }
+
+module.exports = App;

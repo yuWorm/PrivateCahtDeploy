@@ -1,6 +1,6 @@
-import {Room} from "./Room.js";
+const Room = require('./Room');
 
-export class RoomManager {
+class RoomManager {
     constructor() {
         this.rooms = new Map();
     }
@@ -32,3 +32,5 @@ export class RoomManager {
         return roomsInfo;
     }
 }
+
+module.exports = RoomManager;
